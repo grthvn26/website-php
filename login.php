@@ -1,25 +1,26 @@
 <?php
     session_start();
 
-    if ($_SERVER["REQUEST METHOD" == "POST"]){
-        $inputUsername = $_POST['username'];
-        $inputPassword = $_POST['newpass'];
-        $user = file("users.txt", FILE_IGNORE_NEW_LINES);
-        $found = false;
+if ($_SERVER["REQUEST_METHOD"] == "POST"){
+    $inputUsername = $_POST['username'];
+    $inputPassword = $_POST['newpass'];
+    $users = file("users.txt", FILE_IGNORE_NEW_LINES);
+    $found = false;
 
-        foreach ($users as $userLine){
-            $data = explode("|", $userLine);
-
-            if ($data[10] === $inputUsername && $data[11] === $inputPassword) {
-                $found = true;
-                $_SESSION['user_data'] = $data;
-                header("Location: welcome.php");
-                exit;
-        }
-        if (!$found) {
-            echo "<div class='alert alert-danger role='alert'>Invalid username or password.</div>";
+    foreach ($users as $userLine){
+        $data = explode("|", $userLine);
+        if ($data[10] === $inputUsername && $data[11] === $inputPassword) {
+            $found = true;
+            $_SESSION['user_data'] = $data;
+            header("Location: welcome.php");
+            exit;
         }
     }
+
+    if (!$found) {
+        echo "<div class='alert alert-danger role='alert'>Invalid username or password.</div>";
+    }
+}
 ?>
 
 
@@ -66,12 +67,12 @@
                 <h5 class="mb-3 text-center">Login</h5>
                 <form method="POST" action="login.php">
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email address</label>
-                        <input type="email" class="form-control" id="email" placeholder="Enter email" required>
+                        <label for="username" class="form-label">Username</label>
+                        <input type="name" name="username" class="form-control" id="email" placeholder="Enter username" required>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Password" required>
+                        <input type="password" name="newpass" class="form-control" id="password" placeholder="Password" required>
                     </div>
                     <div class="d-grid">
                         <button type="submit" class="btn btn-dark">Login</button>

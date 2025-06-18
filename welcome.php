@@ -25,8 +25,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Services</a>
                     </li>
+                 
                 </ul>
-                <button type="submit" class="btn btn-dark">Logout</button>
+                <a class="btn btn-dark" href="logout.php">Logout</button>
             </div>
         </div>
     </nav>
