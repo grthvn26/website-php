@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 
     if (!$found) {
-        echo "<div class='alert alert-danger role='alert'>Invalid username or password.</div>";
+        echo "<div class='alert alert-danger' role='alert'>Invalid username or password.</div>";
     }
 }
 ?>
@@ -54,6 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                         <a class="nav-link" href="#">Services</a>
                     </li>
                 </ul>
+                
             </div>
         </div>
     </nav>

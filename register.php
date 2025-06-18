@@ -1,5 +1,7 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST"){
+
+    // Personal Information
     $fullname = $_POST['fullname'];
     $gender = $_POST['gender'];
     $dob = $_POST['dob'];
@@ -7,13 +9,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     $email = $_POST['email'];
         
     // Address
-
     $street = $_POST['street'];
     $city = $_POST['city'];
     $province = $_POST['province'];
     $zip = $_POST['zipcode'];
     $country = $_POST['country'];
 
+    // Account Information
     $username = $_POST['username'];
     $password = $_POST['newpass'];
     $confirm = $_POST['confirm'];   
@@ -35,7 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         </script>";
     }       
 }
-   
 ?>
 
 
