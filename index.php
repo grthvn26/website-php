@@ -26,6 +26,7 @@
                         <a class="nav-link" href="#">Services</a>
                     </li>
                 </ul>
+                <a class="btn btn-primary" href="login.php">Login</a>
             </div>
         </div>
     </nav>
@@ -45,6 +46,9 @@
 
     
     <footer class="bg-secondary text-white text-center py-3 mt-auto">
+        <div class="container">
+            <p>&copy; 2025 Aaron Arevalo, UE Manila. All rights reserved.</p>
+        </div>
     </footer>
 
   

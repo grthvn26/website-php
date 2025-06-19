@@ -1,4 +1,6 @@
 <?php
+$message = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
     // Personal Information
@@ -19,11 +21,89 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     $username = $_POST['username'];
     $password = $_POST['newpass'];
     $confirm = $_POST['confirm'];   
+    
+    $full_name_pattern = "/^[A-Za-z ]{2,50}$/";
+    $date_of_birth = $_POST['dob'];
+    $phone_pattern = "/^63\d{9}$/";
+    $email_pattern = "/^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/";
 
-     if ($password !== $confirm){
+    // Address Details
+    $street_pattern = "/^[A-Za-z0-9\s.,#\-]{5,100}$/";
+    $city_pattern = "/^[A-Za-z ]{2,50}$/";
+    $province_pattern = "/^[A-Za-z ]{2,50}$/";
+    $zip_pattern = "/^\d{4}$/";
+    $country_pattern = "/^[A-Za-z ]+$/";
+
+   
+    $username_pattern = "/^\w{5,20}$/";
+    $password_pattern = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/";
+    $dob = DateTime::createFromFormat('Y-m-d', $_POST['dob']);
+    $today = new DateTime();
+    $age = $today->diff($dob)->y;
+    $errors = [];
+
+    if (!preg_match($full_name_pattern, $_POST['fullname'])) {
+        $errors[] = "Full name must be 2-50 letters and spaces only.";
+    }
+
+    if ($age < 18) {
+        $errors[] = "You must be at least 18 years old.";
+    }
+
+    if (!preg_match($phone_pattern, $_POST['tel'])) {
+        $errors[] = "Phone number must be 11 digits and start with 09.";
+    }
+
+    if (!preg_match($email_pattern, $_POST['email'])) {
+        $errors[] = "Invalid email format.";
+    }
+
+    if (!preg_match($street_pattern, $_POST['street'])) {
+        $errors[] = "Street must be 5-100 characters, valid address symbols only.";
+    }
+
+    if (!preg_match($city_pattern, $_POST['city'])) {
+        $errors[] = "City must be 2-50 letters and spaces only.";
+    }
+
+    if (!preg_match($province_pattern, $_POST['province'])) {
+        $errors[] = "Province/State must be 2-50 letters and spaces only.";
+    }
+
+    if (!preg_match($zip_pattern, $_POST['zipcode'])) {
+        $errors[] = "Zip code must be 4 digits.";
+    }
+
+    if (!preg_match($country_pattern, $_POST['country'])) {
+        $errors[] = "Country must be letters and spaces only.";
+    }
+
+    if (!preg_match($username_pattern, $_POST['username'])) {
+        $errors[] = "Username must be 5-20 characters, letters, numbers, and underscores only.";
+    }
+
+    if (!preg_match($password_pattern, $_POST['newpass'])) {
+        $errors[] = "Password must be at least 8 characters, with uppercase, lowercase, digit, and special character.";
+    }
+
+    if ($_POST['newpass'] !== $_POST['confirm']) {
+        $errors[] = "Passwords do not match.";
+    }   
+    
+    if ($password !== $confirm){
         echo "<script>alert('Passwords do not match. Please try again.'); 
         window.history.back();</script>";
-    } else {
+    }
+    
+
+
+    if (!empty($errors)) {
+    foreach ($errors as $error) {
+        echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'> 
+        $error<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div>";
+        }
+    }
+    else {
         $line = implode("|", [
             $fullname, $gender, $dob, $phone, $email,
             $street, $city, $province, $zip, $country,
@@ -38,7 +118,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     }       
 }
 ?>
-
 
 
 <!DOCTYPE html>
@@ -161,7 +240,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                         </div>
 
                         <div class="d-grid gap-2">
-                            <button class="btn btn-secondary btn-lg" name="submit" type="submit">Register Account</button>
+                            <button class="btn btn-secondary btn-lg" name="submit" type="submit">Register</button>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-2">
+                            <button type="reset" class="btn btn-outline-secondary btn-lg">Reset</button>
                         </div>
                     </form>
                 </div>
@@ -171,7 +254,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
     <footer class="bg-secondary text-white text-center py-3 mt-auto">
         <div class="container">
-            <p>&copy; 2025 MyWebsite. All rights reserved.</p>
+            <p>&copy; 2025 Aaron Arevalo, UE Manila. All rights reserved.</p>
         </div>
     </footer>
 

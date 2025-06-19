@@ -88,6 +88,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
     
     <footer class="bg-secondary text-white text-center py-3 mt-auto">
+        <div class="container">
+            <p>&copy; 2025 Aaron Arevalo, UE Manila. All rights reserved.</p>
+        </div>
     </footer>
 
   
