@@ -1,109 +1,103 @@
 <?php
 $message = "";
 
+$fullnameErr = $genderErr = $dobErr = $phoneErr = $emailErr = "";
+$streetErr = $cityErr = $provinceErr = $zipErr = $countryErr = "";
+$usernameErr = $passwordErr = $confirmErr = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
     // Personal Information
-    $fullname = $_POST['fullname'];
-    $gender = $_POST['gender'];
-    $dob = $_POST['dob'];
-    $phone = $_POST['tel'];
-    $email = $_POST['email'];
+    $fullname = trim($_POST['fullname']);
+    $gender = trim($_POST['gender']);
+    $dob = trim($_POST['dob']);
+    $phone = trim($_POST['tel']);
+    $email = trim($_POST['email']);
         
     // Address
-    $street = $_POST['street'];
-    $city = $_POST['city'];
-    $province = $_POST['province'];
-    $zip = $_POST['zipcode'];
-    $country = $_POST['country'];
+    $street = trim($_POST['street']);
+    $city = trim($_POST['city']);
+    $province = trim($_POST['province']);
+    $zip = trim($_POST['zipcode']);
+    $country = trim($_POST['country']);
 
     // Account Information
-    $username = $_POST['username'];
-    $password = $_POST['newpass'];
-    $confirm = $_POST['confirm'];   
+    $username = trim($_POST['username']);
+    $password = trim($_POST['newpass']);
+    $confirm = trim($_POST['confirm']);   
     
     $full_name_pattern = "/^[A-Za-z ]{2,50}$/";
-    $date_of_birth = $_POST['dob'];
-    $phone_pattern = "/^63\d{9}$/";
+    $phone_pattern = "/^09\d{9}$/";
     $email_pattern = "/^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/";
-
-    // Address Details
     $street_pattern = "/^[A-Za-z0-9\s.,#\-]{5,100}$/";
     $city_pattern = "/^[A-Za-z ]{2,50}$/";
     $province_pattern = "/^[A-Za-z ]{2,50}$/";
     $zip_pattern = "/^\d{4}$/";
     $country_pattern = "/^[A-Za-z ]+$/";
-
-   
     $username_pattern = "/^\w{5,20}$/";
     $password_pattern = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/";
-    $dob = DateTime::createFromFormat('Y-m-d', $_POST['dob']);
+
+    $dobObj = DateTime::createFromFormat('Y-m-d', $dob);
     $today = new DateTime();
-    $age = $today->diff($dob)->y;
-    $errors = [];
+    $age = $dobObj ? $today->diff($dobObj)->y : 0;
 
-    if (!preg_match($full_name_pattern, $_POST['fullname'])) {
-        $errors[] = "Full name must be 2-50 letters and spaces only.";
+    if (!preg_match($full_name_pattern, $fullname)) {
+        $fullnameErr = "<div class='text-danger small mt-1'>Full name must be 2-50 letters and spaces only.</div>";
     }
 
-    if ($age < 18) {
-        $errors[] = "You must be at least 18 years old.";
+    if (empty($gender)) {
+        $genderErr = "<div class='text-danger small mt-1'>Please select a gender.</div>";
     }
 
-    if (!preg_match($phone_pattern, $_POST['tel'])) {
-        $errors[] = "Phone number must be 11 digits and start with 09.";
+    if (!$dobObj || $age < 18) {
+        $dobErr = "<div class='text-danger small mt-1'>You must be at least 18 years old.</div>";
     }
 
-    if (!preg_match($email_pattern, $_POST['email'])) {
-        $errors[] = "Invalid email format.";
+    if (!preg_match($phone_pattern, $phone)) {
+        $phoneErr = "<div class='text-danger small mt-1'>Phone number must be 11 digits and start with 09.</div>";
     }
 
-    if (!preg_match($street_pattern, $_POST['street'])) {
-        $errors[] = "Street must be 5-100 characters, valid address symbols only.";
+    if (!preg_match($email_pattern, $email)) {
+        $emailErr = "<div class='text-danger small mt-1'>Invalid email format.</div>";
     }
 
-    if (!preg_match($city_pattern, $_POST['city'])) {
-        $errors[] = "City must be 2-50 letters and spaces only.";
+    if (!preg_match($street_pattern, $street)) {
+        $streetErr = "<div class='text-danger small mt-1'>Street must be 5-100 characters, valid address symbols only.</div>";
     }
 
-    if (!preg_match($province_pattern, $_POST['province'])) {
-        $errors[] = "Province/State must be 2-50 letters and spaces only.";
+    if (!preg_match($city_pattern, $city)) {
+        $cityErr = "<div class='text-danger small mt-1'>City must be 2-50 letters and spaces only.</div>";
     }
 
-    if (!preg_match($zip_pattern, $_POST['zipcode'])) {
-        $errors[] = "Zip code must be 4 digits.";
+    if (!preg_match($province_pattern, $province)) {
+        $provinceErr = "<div class='text-danger small mt-1'>Province/State must be 2-50 letters and spaces only.</div>";
     }
 
-    if (!preg_match($country_pattern, $_POST['country'])) {
-        $errors[] = "Country must be letters and spaces only.";
+    if (!preg_match($zip_pattern, $zip)) {
+        $zipErr = "<div class='text-danger small mt-1'>Zip code must be 4 digits.</div>";
     }
 
-    if (!preg_match($username_pattern, $_POST['username'])) {
-        $errors[] = "Username must be 5-20 characters, letters, numbers, and underscores only.";
+    if (!preg_match($country_pattern, $country)) {
+        $countryErr = "<div class='text-danger small mt-1'>Country must be letters and spaces only.</div>";
     }
 
-    if (!preg_match($password_pattern, $_POST['newpass'])) {
-        $errors[] = "Password must be at least 8 characters, with uppercase, lowercase, digit, and special character.";
+    if (!preg_match($username_pattern, $username)) {
+        $usernameErr = "<div class='text-danger small mt-1'>Username must be 5-20 characters, letters, numbers, and underscores only.</div>";
     }
 
-    if ($_POST['newpass'] !== $_POST['confirm']) {
-        $errors[] = "Passwords do not match.";
-    }   
-    
-    if ($password !== $confirm){
-        echo "<script>alert('Passwords do not match. Please try again.'); 
-        window.history.back();</script>";
+    if (!preg_match($password_pattern, $password)) {
+        $passwordErr = "<div class='text-danger small mt-1'>Password must be at least 8 characters, with uppercase, lowercase, digit, and special character.</div>";
     }
-    
 
-
-    if (!empty($errors)) {
-    foreach ($errors as $error) {
-        echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'> 
-        $error<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div>";
-        }
+    if ($password !== $confirm) {
+        $confirmErr = "<div class='text-danger small mt-1'>Passwords do not match.</div>";
     }
-    else {
+
+    if (
+        empty($fullnameErr) && empty($genderErr) && empty($dobErr) && empty($phoneErr) && empty($emailErr) &&
+        empty($streetErr) && empty($cityErr) && empty($provinceErr) && empty($zipErr) && empty($countryErr) &&
+        empty($usernameErr) && empty($passwordErr) && empty($confirmErr)
+    ) {
         $line = implode("|", [
             $fullname, $gender, $dob, $phone, $email,
             $street, $city, $province, $zip, $country,
@@ -115,7 +109,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
             alert('Registration successful! Proceeding to login...');
             window.location.href = 'login.php';
         </script>";
-    }       
+        exit;
+    }
 }
 ?>
 
@@ -151,7 +146,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
             </div>
         </div>
     </nav>
-      
+    <main>
         <div class="container py-5">
             <div class="row justify-content-center">
                 <div class="col-lg-6">
@@ -162,28 +157,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                             <div class="col-12">
                                 <label for="fullName" class="form-label">Full Name</label>
                                 <input type="text" name="fullname" class="form-control" id="name" placeholder="Enter your full name" required>
+                                <?php if (!empty($fullnameErr)) echo $fullnameErr; ?>
                             </div>
                             <div class="col-md-6">
                                 <label for="gender" class="form-label">Gender</label>
                                 <select name="gender" class="form-select" id="gender" required>
                                     <option value="">Choose</option>
-                                    <option>Male</option>
-                                    <option>Female</option>
-                                    <option>Prefer not to say</option>
-                                    <option>Other</option>
+                                    <option <?php if(isset($gender) && $gender=="Male") echo "selected"; ?>>Male</option>
+                                    <option <?php if(isset($gender) && $gender=="Female") echo "selected"; ?>>Female</option>
+                                    <option <?php if(isset($gender) && $gender=="Prefer not to say") echo "selected"; ?>>Prefer not to say</option>
+                                    <option <?php if(isset($gender) && $gender=="Other") echo "selected"; ?>>Other</option>
                                 </select>
+                                <?php if (!empty($genderErr)) echo $genderErr; ?>
                             </div>
                             <div class="col-md-6">
                                 <label for="dob" class="form-label">Date of Birth</label>
                                 <input type="date" name="dob" class="form-control" id="date" required>
+                                <?php if (!empty($dobErr)) echo $dobErr; ?>
                             </div>
                             <div class="col-md-6">
                                 <label for="phone" class="form-label">Phone Number</label>
                                 <input type="tel" name="tel" class="form-control" id="phone" placeholder="e.g., +639123456789" required>
+                                <?php if (!empty($phoneErr)) echo $phoneErr; ?>
                             </div>
                             <div class="col-md-6">
                                 <label for="emailRegister" class="form-label">Email</label>
                                 <input type="email" name="email" class="form-control" id="email" placeholder="you@example.com" required>
+                                <?php if (!empty($emailErr)) echo $emailErr; ?>
                             </div>
                         </div>
 
@@ -192,32 +192,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                             <div class="col-12">
                                 <label for="street" class="form-label">Street Address</label>
                                 <input type="text" name="street" class="form-control" id="street" placeholder="123 Main St" required>
+                                <?php if (!empty($streetErr)) echo $streetErr; ?>
                             </div>
                             <div class="col-md-6">
                                 <label for="city" class="form-label">City</label>
                                 <input type="text" name="city" class="form-control" id="city" required>
+                                <?php if (!empty($cityErr)) echo $cityErr; ?>
                             </div>
                             <div class="col-md-6">
                                 <label for="provinceState" class="form-label">Province/State</label>
                                 <input type="text" name="province" class="form-control" id="provinceState" required>
+                                <?php if (!empty($provinceErr)) echo $provinceErr; ?>
                             </div>
                             <div class="col-md-6">
                                 <label for="zipCode" class="form-label">Zip Code</label>
                                 <input type="text" name="zipcode" class="form-control" id="zipCode" required>
+                                <?php if (!empty($zipErr)) echo $zipErr; ?>
                             </div>
                             <div class="col-md-6">
                                 <label for="country" class="form-label">Country</label>
                                 <select class="form-select" name="country" id="country" required>
                                     <option value="">Choose...</option>
-                                    <option>Philippines</option>
-                                    <option>United States</option>
-                                    <option>Canada</option>
-                                    <option>United Kingdom</option>
-                                    <option>Australia</option>
-                                    <option>Other</option>
+                                        <option <?php if(isset($country) && $country=="Philippines") echo "selected"; ?>>Philippines</option>
+                                        <option <?php if(isset($country) && $country=="United States") echo "selected"; ?>>United States</option>
+                                        <option <?php if(isset($country) && $country=="Canada") echo "selected"; ?>>Canada</option>
+                                        <option <?php if(isset($country) && $country=="United Kingdom") echo "selected"; ?>>United Kingdom</option>
+                                        <option <?php if(isset($country) && $country=="Australia") echo "selected"; ?>>Australia</option>
+                                        <option <?php if(isset($country) && $country=="Other") echo "selected"; ?>>Other</option>
                                 </select>
+                                <?php if (!empty($countryErr)) echo $countryErr; ?>
                             </div>
-                        </div>
 
                         <h4 class="mb-3">Account Details</h4>
                         <div class="row g-3 mb-4">
@@ -234,8 +238,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                             <div class="col-md-6">
                                 <label for="newPassword" class="form-label">Password</label>
                                 <input type="password" name="newpass" class="form-control" id="newPassword" required>
+                                <?php if (!empty($passwordErr)) echo $passwordErr; ?>
                                 <label for="confirmPassword" class="form-label">Confirm Password</label>
                                 <input type="password" name="confirm" class="form-control" id="newPassword" required>
+                                <?php if (!empty($confirmErr)) echo $confirmErr; ?>
                             </div>
                         </div>
 
