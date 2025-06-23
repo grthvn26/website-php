@@ -17,7 +17,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="home.php">Home</a>
+                        <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">About</a>
@@ -32,13 +32,12 @@
     </nav>
 
     
-  <main class="flex-grow-1">
-
+<main class="flex-grow-1">
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-lg-6 text-center">
-                <h1 class="mb-4">Welcome to MyWebsite!</h1>
-                <p class="lead">Welcome to the University of the East! Insert Placeholder Text</p>
+                <h1 class="mb-4">Welcome to the University of the East - Jam Sessions!</h1>
+                <p class="lead">Insert Text</p>
             </div>
         </div>
     </div>

@@ -1,9 +1,9 @@
 <?php
-    session_start();
+session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST"){
-    $inputUsername = $_POST['username'];
-    $inputPassword = $_POST['newpass'];
+    $inputUsername = trim($_POST['username']);
+    $inputPassword = trim($_POST['newpass']);
     $users = file("users.txt", FILE_IGNORE_NEW_LINES);
     $found = false;
 
@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         $data = explode("|", $userLine);
         if ($data[10] === $inputUsername && $data[11] === $inputPassword) {
             $found = true;
-            $_SESSION['user_data'] = $data;
+            $_SESSION['user_data'] = $data; 
             header("Location: welcome.php");
             exit;
         }
@@ -22,8 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 }
 ?>
-
-
 
 
 <!DOCTYPE html>
@@ -45,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="home.php">Home</a>
+                        <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">About</a>
@@ -60,8 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     </nav>
 
     
-  <main class="flex-grow-1">
-
+<main class="flex-grow-1">
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-lg-4">
@@ -94,6 +91,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     </footer>
 
   
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
